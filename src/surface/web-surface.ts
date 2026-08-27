@@ -70,6 +70,12 @@ export class WebSurface implements Surface {
     await this.page.goto(to, { waitUntil: "load" });
   }
 
+  async reload(framePath: string[] = []): Promise<void> {
+    const frame = await this.frameForAsync(framePath);
+    await frame.goto(frame.url(), { waitUntil: "load" });
+    await this.settle();
+  }
+
   async resolve(bundle: LocatorBundle): Promise<Resolved | null> {
     const frame = await this.frameForAsync(bundle.framePath ?? []);
     for (let i = 0; i < bundle.strategies.length; i++) {

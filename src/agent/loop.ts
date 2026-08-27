@@ -28,6 +28,7 @@ export interface DiscoverySpec {
   inputs: InputValue[];
   successCondition: Checkpoint;
   businessOutcomes?: Capability["businessOutcomes"];
+  recovery?: Capability["recovery"];
 }
 
 export interface DiscoveryDeps {
@@ -171,6 +172,7 @@ async function emit(spec: DiscoverySpec, deps: DiscoveryDeps, steps: Step[], out
     steps,
     successCondition: spec.successCondition,
     businessOutcomes: spec.businessOutcomes ?? [],
+    recovery: spec.recovery ?? [],
     guardrails: { allowlist: { routes: deps.allowlist.routes, actions: deps.allowlist.actions } },
     provenance: {
       discoveredBy: { provider: deps.provider.name, model: deps.provider.model },

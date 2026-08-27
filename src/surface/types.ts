@@ -37,6 +37,8 @@ export interface Resolved {
 export interface Surface {
   perceive(): Promise<Observation>;
   navigate(to: string): Promise<void>;
+  /** Reload a frame by re-requesting its current URL (used by "retry" recovery on transient errors). */
+  reload(framePath?: string[]): Promise<void>;
   resolve(bundle: LocatorBundle): Promise<Resolved | null>;
   resolveRef(ref: string, framePath: string[]): Promise<Resolved | null>;
   click(h: Resolved): Promise<void>;

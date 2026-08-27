@@ -79,7 +79,8 @@ export type Action = z.infer<typeof Action>;
 export const RecoveryRule = z.object({
   when: Checkpoint,
   do: z.enum(["dismiss", "retry", "reauth"]),
-  target: LocatorBundle.optional(),
+  target: LocatorBundle.optional(), // for "dismiss": what to click
+  framePath: z.array(z.string()).optional(), // for "retry": which frame to reload
   maxAttempts: z.number().int().positive().default(2),
 });
 export type RecoveryRule = z.infer<typeof RecoveryRule>;
@@ -175,6 +176,9 @@ export const Capability = z.object({
   steps: z.array(Step).min(1),
   successCondition: Checkpoint,
   businessOutcomes: z.array(BusinessOutcome).default([]),
+  /** Global recovery rules, evaluated at every step boundary during replay: the injected runtime
+   *  conditions (interstitials, transient failures, session expiry) can appear at any step (§9). */
+  recovery: z.array(RecoveryRule).default([]),
   guardrails: Guardrails,
   provenance: Provenance,
 });

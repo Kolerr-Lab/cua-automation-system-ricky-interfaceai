@@ -383,6 +383,10 @@ load-bearing pieces over a broad, shallow surface.
 
 ## 17. Blueprint changelog
 
+- `1.1.0` — Amendment (§6.5, §9): added capability-level `recovery: RecoveryRule[]`, evaluated at
+  every step boundary during replay, because injected runtime conditions (interstitials, transient
+  failures, session expiry) can appear at any step, not only a fixed one; added `RecoveryRule.framePath`
+  to scope a "retry" reload to a frame. Per-step `Step.recover` retained for step-specific conditions.
 - `1.0.0` — LOCKED. Approved by Ricky 2026-08-27. Downstream files may now be generated.
 - `0.1.0` — initial draft for LOCK.
 ```
