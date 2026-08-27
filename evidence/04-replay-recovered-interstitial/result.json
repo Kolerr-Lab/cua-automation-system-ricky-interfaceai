@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "outputs": {
+    "savingsBalance": "$4,210.55"
+  },
+  "recovery": [
+    "dismiss@s6"
+  ],
+  "evidenceRef": "evidence/04-replay-recovered-interstitial"
+}

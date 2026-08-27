@@ -55,6 +55,7 @@ export async function discover(spec: DiscoverySpec, deps: DiscoveryDeps): Promis
   const outputs: OutputField[] = [];
   const captured: Record<string, string> = {};
   const history: string[] = [];
+  let stabilizeRetries = 2; // a give_up may just be a mid-navigation; settle and re-observe before accepting it
 
   // Step 0: navigate to the entry point (recorded canonically; tenant base is injected at replay).
   await surface.navigate(spec.tenantBaseUrl + spec.entryPoint);
@@ -75,6 +76,12 @@ export async function discover(spec: DiscoverySpec, deps: DiscoveryDeps): Promis
     trace.emit("decide", "decide.action", { data: { type: a.type, thought: decision.thought, ...("ref" in a ? { ref: a.ref } : {}) } });
 
     if (a.type === "give_up") {
+      if (stabilizeRetries > 0) {
+        stabilizeRetries -= 1;
+        await surface.settle();
+        trace.emit("system", "stabilize.retry", { data: { reason: a.reason } });
+        continue;
+      }
       trace.emit("outcome", "outcome.gave_up", { level: "warn", data: { reason: a.reason } });
       return { status: "gave_up", reason: a.reason };
     }
@@ -128,6 +135,7 @@ export async function discover(spec: DiscoverySpec, deps: DiscoveryDeps): Promis
       steps.push({ id: stepId, intent: `read "${el.label ?? el.name}"`, action: { type: "read" }, target, risk: "safe", policy: "auto", recover: [] });
       history.push(`read ${el.label ?? el.name}`);
     }
+    stabilizeRetries = 2; // progress made — refresh the stabilization budget for the next nav point
   }
 
   // Verify the goal actually landed (not just that the last click "worked").

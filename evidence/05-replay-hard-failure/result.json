@@ -1,0 +1,10 @@
+{
+  "status": "hard_failure",
+  "failure": {
+    "stepId": "s6",
+    "category": "LOCATOR_UNRESOLVED",
+    "expected": "resolve read \"Savings Balance\"",
+    "observed": "no strategy matched at http://localhost:4010/t/acme/desktop",
+    "evidenceRef": "evidence/05-replay-hard-failure/screenshots/fail-s6.png"
+  }
+}

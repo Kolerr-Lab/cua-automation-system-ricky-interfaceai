@@ -1,0 +1,8 @@
+{
+  "status": "success",
+  "outputs": {
+    "savingsBalance": "$4,210.55"
+  },
+  "recovery": [],
+  "evidenceRef": "evidence/06-replay-cross-tenant-globus"
+}

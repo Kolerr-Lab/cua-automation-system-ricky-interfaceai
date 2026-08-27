@@ -1,0 +1,23 @@
+{
+  "capabilityId": "member.read-savings-balance",
+  "name": "Read member savings balance",
+  "description": "Sign on, look up the member, and read their current savings balance.",
+  "labels": ["member", "read", "balance"],
+  "appFamily": "acme-corebanking",
+  "entryPoint": "/",
+  "inputs": [
+    { "name": "userId", "type": "string", "required": true, "description": "Operator user id", "sensitive": false, "value": "teller01" },
+    { "name": "password", "type": "string", "required": true, "description": "Operator password", "sensitive": true, "value": "demo-pass" },
+    { "name": "memberId", "type": "string", "required": true, "description": "Member number to look up", "sensitive": false, "value": "12345" }
+  ],
+  "successCondition": { "kind": "textPresent", "text": "Savings Balance" },
+  "businessOutcomes": [
+    { "code": "member_not_found", "detect": { "kind": "textPresent", "text": "No such member" }, "terminal": true },
+    { "code": "permission_denied", "detect": { "kind": "textPresent", "text": "not authorized" }, "terminal": true }
+  ],
+  "recovery": [
+    { "when": { "kind": "textPresent", "text": "System Notice" }, "do": "dismiss", "target": { "strategies": [{ "by": "role", "role": "link", "name": "Continue" }, { "by": "text", "text": "Continue" }], "framePath": ["content"], "invariants": {} }, "maxAttempts": 2 },
+    { "when": { "kind": "textPresent", "text": "temporarily unavailable" }, "do": "retry", "framePath": ["content"], "maxAttempts": 3 },
+    { "when": { "kind": "textPresent", "text": "session has expired" }, "do": "reauth", "maxAttempts": 1 }
+  ]
+}

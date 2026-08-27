@@ -2852,6 +2852,12 @@
                       ],
                       "additionalProperties": false
                     },
+                    "framePath": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
                     "maxAttempts": {
                       "type": "integer",
                       "exclusiveMinimum": 0,
@@ -3772,6 +3778,651 @@
             "required": [
               "code",
               "detect"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "recovery": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "when": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "urlMatches"
+                      },
+                      "pattern": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "pattern"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "elementVisible"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textPresent"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textAbsent"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "valueEquals"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "do": {
+                "type": "string",
+                "enum": [
+                  "dismiss",
+                  "retry",
+                  "reauth"
+                ]
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "strategies": {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "role"
+                            },
+                            "role": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "exact": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "role",
+                            "name"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "label"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "scope": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "label"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "rowAnchor"
+                            },
+                            "header": {
+                              "type": "string"
+                            },
+                            "cell": {
+                              "type": "string"
+                            },
+                            "targetCol": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "header",
+                            "cell",
+                            "targetCol"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "attr"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "name",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "text"
+                            },
+                            "text": {
+                              "type": "string"
+                            },
+                            "exact": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "structural"
+                            },
+                            "css": {
+                              "type": "string"
+                            },
+                            "index": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "css",
+                            "index"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "minItems": 1
+                  },
+                  "framePath": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "invariants": {
+                    "type": "object",
+                    "properties": {
+                      "role": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "editable": {
+                        "type": "boolean"
+                      },
+                      "visible": {
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "default": {}
+                  }
+                },
+                "required": [
+                  "strategies"
+                ],
+                "additionalProperties": false
+              },
+              "framePath": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "maxAttempts": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "default": 2
+              }
+            },
+            "required": [
+              "when",
+              "do"
             ],
             "additionalProperties": false
           },

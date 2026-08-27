@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "schema:export": "tsx src/artifact/export-schema.ts",
+    "evidence": "tsx scripts/generate-evidence.ts",
     "mock-bank": "tsx src/cli/index.ts serve-mock",
     "discover": "tsx src/cli/index.ts discover",
     "replay": "tsx src/cli/index.ts replay",

@@ -1,0 +1,349 @@
+{
+  "schemaVersion": "1.0.0",
+  "capabilityId": "member.read-savings-balance",
+  "version": "1.0.0",
+  "name": "Read member savings balance",
+  "description": "Sign on, look up the member, and read their current savings balance.",
+  "labels": [
+    "member",
+    "read",
+    "balance"
+  ],
+  "target": {
+    "appFamily": "acme-corebanking",
+    "surfaceKind": "web",
+    "entryPoint": "/"
+  },
+  "inputs": [
+    {
+      "name": "userId",
+      "type": "string",
+      "required": true,
+      "description": "Operator user id",
+      "sensitive": false
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "required": true,
+      "description": "Operator password",
+      "sensitive": true
+    },
+    {
+      "name": "memberId",
+      "type": "string",
+      "required": true,
+      "description": "Member number to look up",
+      "sensitive": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "savingsBalance",
+      "type": "string",
+      "description": "captured \"Savings Balance\"",
+      "source": {
+        "fromStepId": "s6",
+        "extract": "text"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "s0",
+      "intent": "open /",
+      "action": {
+        "type": "navigate",
+        "to": "/"
+      },
+      "risk": "safe",
+      "policy": "auto",
+      "recover": []
+    },
+    {
+      "id": "s1",
+      "intent": "type into \"User ID\"",
+      "action": {
+        "type": "type"
+      },
+      "target": {
+        "strategies": [
+          {
+            "by": "label",
+            "label": "User ID"
+          },
+          {
+            "by": "attr",
+            "name": "name",
+            "value": "userId"
+          }
+        ],
+        "framePath": [],
+        "invariants": {
+          "visible": true,
+          "editable": true
+        }
+      },
+      "inputBinding": {
+        "param": "userId"
+      },
+      "risk": "safe",
+      "policy": "auto",
+      "recover": []
+    },
+    {
+      "id": "s2",
+      "intent": "type into \"Password\"",
+      "action": {
+        "type": "type"
+      },
+      "target": {
+        "strategies": [
+          {
+            "by": "label",
+            "label": "Password"
+          },
+          {
+            "by": "attr",
+            "name": "name",
+            "value": "password"
+          }
+        ],
+        "framePath": [],
+        "invariants": {
+          "visible": true,
+          "editable": true
+        }
+      },
+      "inputBinding": {
+        "param": "password"
+      },
+      "risk": "safe",
+      "policy": "auto",
+      "recover": []
+    },
+    {
+      "id": "s3",
+      "intent": "click \"Sign On\"",
+      "action": {
+        "type": "click"
+      },
+      "target": {
+        "strategies": [
+          {
+            "by": "role",
+            "role": "button",
+            "name": "Sign On"
+          },
+          {
+            "by": "text",
+            "text": "Sign On"
+          },
+          {
+            "by": "attr",
+            "name": "value",
+            "value": "Sign On"
+          }
+        ],
+        "framePath": [],
+        "invariants": {
+          "visible": true,
+          "role": "button",
+          "name": "Sign On"
+        }
+      },
+      "risk": "safe",
+      "policy": "auto",
+      "recover": []
+    },
+    {
+      "id": "s4",
+      "intent": "type into \"Member #\"",
+      "action": {
+        "type": "type"
+      },
+      "target": {
+        "strategies": [
+          {
+            "by": "label",
+            "label": "Member #"
+          },
+          {
+            "by": "attr",
+            "name": "name",
+            "value": "memberNo"
+          }
+        ],
+        "framePath": [
+          "content"
+        ],
+        "invariants": {
+          "visible": true,
+          "editable": true
+        }
+      },
+      "inputBinding": {
+        "param": "memberId"
+      },
+      "risk": "safe",
+      "policy": "auto",
+      "recover": []
+    },
+    {
+      "id": "s5",
+      "intent": "click \"Find\"",
+      "action": {
+        "type": "click"
+      },
+      "target": {
+        "strategies": [
+          {
+            "by": "role",
+            "role": "button",
+            "name": "Find"
+          },
+          {
+            "by": "text",
+            "text": "Find"
+          },
+          {
+            "by": "attr",
+            "name": "value",
+            "value": "Find"
+          }
+        ],
+        "framePath": [
+          "content"
+        ],
+        "invariants": {
+          "visible": true,
+          "role": "button",
+          "name": "Find"
+        }
+      },
+      "risk": "safe",
+      "policy": "auto",
+      "recover": []
+    },
+    {
+      "id": "s6",
+      "intent": "read \"Savings Balance\"",
+      "action": {
+        "type": "read"
+      },
+      "target": {
+        "strategies": [
+          {
+            "by": "rowAnchor",
+            "header": "label",
+            "cell": "Savings Balance",
+            "targetCol": "value"
+          }
+        ],
+        "framePath": [
+          "content"
+        ],
+        "invariants": {
+          "visible": true
+        }
+      },
+      "risk": "safe",
+      "policy": "auto",
+      "recover": []
+    }
+  ],
+  "successCondition": {
+    "kind": "textPresent",
+    "text": "Savings Balance"
+  },
+  "businessOutcomes": [
+    {
+      "code": "member_not_found",
+      "detect": {
+        "kind": "textPresent",
+        "text": "No such member"
+      },
+      "terminal": true
+    },
+    {
+      "code": "permission_denied",
+      "detect": {
+        "kind": "textPresent",
+        "text": "not authorized"
+      },
+      "terminal": true
+    }
+  ],
+  "recovery": [
+    {
+      "when": {
+        "kind": "textPresent",
+        "text": "System Notice"
+      },
+      "do": "dismiss",
+      "target": {
+        "strategies": [
+          {
+            "by": "role",
+            "role": "link",
+            "name": "Continue"
+          },
+          {
+            "by": "text",
+            "text": "Continue"
+          }
+        ],
+        "framePath": [
+          "content"
+        ],
+        "invariants": {}
+      },
+      "maxAttempts": 2
+    },
+    {
+      "when": {
+        "kind": "textPresent",
+        "text": "temporarily unavailable"
+      },
+      "do": "retry",
+      "framePath": [
+        "content"
+      ],
+      "maxAttempts": 3
+    },
+    {
+      "when": {
+        "kind": "textPresent",
+        "text": "session has expired"
+      },
+      "do": "reauth",
+      "maxAttempts": 1
+    }
+  ],
+  "guardrails": {
+    "allowlist": {
+      "routes": [
+        "http://localhost:4010/**"
+      ],
+      "actions": [
+        "navigate",
+        "click",
+        "type",
+        "select",
+        "read",
+        "waitFor",
+        "assert"
+      ]
+    }
+  },
+  "provenance": {
+    "discoveredBy": {
+      "provider": "mock",
+      "model": "mock-1"
+    },
+    "discoveredAt": "2026-08-27T11:57:58.060Z",
+    "sourceRunId": "01-discovery-mock",
+    "evidenceRef": "evidence/01-discovery-mock",
+    "checksum": "d2ded011f33c0a0f"
+  }
+}
