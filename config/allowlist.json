@@ -1,0 +1,7 @@
+{
+  "$comment": "Safety allowlist (blueprint §12). Enforced on EVERY act() in discovery and replay. Anything outside -> GUARDRAIL_BLOCKED.",
+  "routes": [
+    "http://localhost:4010/**"
+  ],
+  "actions": ["navigate", "click", "type", "select", "read", "waitFor", "assert"]
+}

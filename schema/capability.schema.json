@@ -1,0 +1,3878 @@
+{
+  "$ref": "#/definitions/Capability",
+  "definitions": {
+    "Capability": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "capabilityId": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "appFamily": {
+              "type": "string"
+            },
+            "surfaceKind": {
+              "type": "string",
+              "enum": [
+                "web",
+                "desktop"
+              ],
+              "default": "web"
+            },
+            "entryPoint": {
+              "type": "string"
+            },
+            "compatibleVersions": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "appFamily",
+            "entryPoint"
+          ],
+          "additionalProperties": false
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "enum"
+                ]
+              },
+              "required": {
+                "type": "boolean",
+                "default": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "example": {
+                "type": "string"
+              },
+              "enumValues": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "sensitive": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": [
+              "name",
+              "type",
+              "description"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "enum"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "fromStepId": {
+                    "type": "string"
+                  },
+                  "extract": {
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "value",
+                      "attribute"
+                    ]
+                  },
+                  "attribute": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "fromStepId",
+                  "extract"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "name",
+              "type",
+              "description",
+              "source"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "intent": {
+                "type": "string"
+              },
+              "action": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "navigate"
+                      },
+                      "to": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "to"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "click"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "type"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "select"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "read"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "waitFor"
+                      },
+                      "checkpoint": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "urlMatches"
+                              },
+                              "pattern": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "pattern"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "elementVisible"
+                              },
+                              "locator": {
+                                "type": "object",
+                                "properties": {
+                                  "strategies": {
+                                    "type": "array",
+                                    "items": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "role"
+                                            },
+                                            "role": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "role",
+                                            "name"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "label"
+                                            },
+                                            "label": {
+                                              "type": "string"
+                                            },
+                                            "scope": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "label"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "rowAnchor"
+                                            },
+                                            "header": {
+                                              "type": "string"
+                                            },
+                                            "cell": {
+                                              "type": "string"
+                                            },
+                                            "targetCol": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "header",
+                                            "cell",
+                                            "targetCol"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "attr"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "name",
+                                            "value"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "text"
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "text"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "structural"
+                                            },
+                                            "css": {
+                                              "type": "string"
+                                            },
+                                            "index": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "css",
+                                            "index"
+                                          ],
+                                          "additionalProperties": false
+                                        }
+                                      ]
+                                    },
+                                    "minItems": 1
+                                  },
+                                  "framePath": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "invariants": {
+                                    "type": "object",
+                                    "properties": {
+                                      "role": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "editable": {
+                                        "type": "boolean"
+                                      },
+                                      "visible": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "default": {}
+                                  }
+                                },
+                                "required": [
+                                  "strategies"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "locator"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "textPresent"
+                              },
+                              "text": {
+                                "type": "string"
+                              },
+                              "scope": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "text"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "textAbsent"
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "text"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "valueEquals"
+                              },
+                              "locator": {
+                                "type": "object",
+                                "properties": {
+                                  "strategies": {
+                                    "type": "array",
+                                    "items": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "role"
+                                            },
+                                            "role": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "role",
+                                            "name"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "label"
+                                            },
+                                            "label": {
+                                              "type": "string"
+                                            },
+                                            "scope": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "label"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "rowAnchor"
+                                            },
+                                            "header": {
+                                              "type": "string"
+                                            },
+                                            "cell": {
+                                              "type": "string"
+                                            },
+                                            "targetCol": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "header",
+                                            "cell",
+                                            "targetCol"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "attr"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "name",
+                                            "value"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "text"
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "text"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "structural"
+                                            },
+                                            "css": {
+                                              "type": "string"
+                                            },
+                                            "index": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "css",
+                                            "index"
+                                          ],
+                                          "additionalProperties": false
+                                        }
+                                      ]
+                                    },
+                                    "minItems": 1
+                                  },
+                                  "framePath": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "invariants": {
+                                    "type": "object",
+                                    "properties": {
+                                      "role": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "editable": {
+                                        "type": "boolean"
+                                      },
+                                      "visible": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "default": {}
+                                  }
+                                },
+                                "required": [
+                                  "strategies"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "locator",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "checkpoint"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "assert"
+                      },
+                      "checkpoint": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "urlMatches"
+                              },
+                              "pattern": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "pattern"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "elementVisible"
+                              },
+                              "locator": {
+                                "type": "object",
+                                "properties": {
+                                  "strategies": {
+                                    "type": "array",
+                                    "items": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "role"
+                                            },
+                                            "role": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "role",
+                                            "name"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "label"
+                                            },
+                                            "label": {
+                                              "type": "string"
+                                            },
+                                            "scope": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "label"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "rowAnchor"
+                                            },
+                                            "header": {
+                                              "type": "string"
+                                            },
+                                            "cell": {
+                                              "type": "string"
+                                            },
+                                            "targetCol": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "header",
+                                            "cell",
+                                            "targetCol"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "attr"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "name",
+                                            "value"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "text"
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "text"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "structural"
+                                            },
+                                            "css": {
+                                              "type": "string"
+                                            },
+                                            "index": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "css",
+                                            "index"
+                                          ],
+                                          "additionalProperties": false
+                                        }
+                                      ]
+                                    },
+                                    "minItems": 1
+                                  },
+                                  "framePath": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "invariants": {
+                                    "type": "object",
+                                    "properties": {
+                                      "role": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "editable": {
+                                        "type": "boolean"
+                                      },
+                                      "visible": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "default": {}
+                                  }
+                                },
+                                "required": [
+                                  "strategies"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "locator"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "textPresent"
+                              },
+                              "text": {
+                                "type": "string"
+                              },
+                              "scope": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "text"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "textAbsent"
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "text"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "valueEquals"
+                              },
+                              "locator": {
+                                "type": "object",
+                                "properties": {
+                                  "strategies": {
+                                    "type": "array",
+                                    "items": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "role"
+                                            },
+                                            "role": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "role",
+                                            "name"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "label"
+                                            },
+                                            "label": {
+                                              "type": "string"
+                                            },
+                                            "scope": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "label"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "rowAnchor"
+                                            },
+                                            "header": {
+                                              "type": "string"
+                                            },
+                                            "cell": {
+                                              "type": "string"
+                                            },
+                                            "targetCol": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "header",
+                                            "cell",
+                                            "targetCol"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "attr"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "name",
+                                            "value"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "text"
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            },
+                                            "exact": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "text"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "by": {
+                                              "type": "string",
+                                              "const": "structural"
+                                            },
+                                            "css": {
+                                              "type": "string"
+                                            },
+                                            "index": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "by",
+                                            "css",
+                                            "index"
+                                          ],
+                                          "additionalProperties": false
+                                        }
+                                      ]
+                                    },
+                                    "minItems": 1
+                                  },
+                                  "framePath": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "invariants": {
+                                    "type": "object",
+                                    "properties": {
+                                      "role": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "editable": {
+                                        "type": "boolean"
+                                      },
+                                      "visible": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "default": {}
+                                  }
+                                },
+                                "required": [
+                                  "strategies"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "locator",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "checkpoint"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "strategies": {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "role"
+                            },
+                            "role": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "exact": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "role",
+                            "name"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "label"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "scope": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "label"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "rowAnchor"
+                            },
+                            "header": {
+                              "type": "string"
+                            },
+                            "cell": {
+                              "type": "string"
+                            },
+                            "targetCol": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "header",
+                            "cell",
+                            "targetCol"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "attr"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "name",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "text"
+                            },
+                            "text": {
+                              "type": "string"
+                            },
+                            "exact": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "string",
+                              "const": "structural"
+                            },
+                            "css": {
+                              "type": "string"
+                            },
+                            "index": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "by",
+                            "css",
+                            "index"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "minItems": 1
+                  },
+                  "framePath": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "invariants": {
+                    "type": "object",
+                    "properties": {
+                      "role": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "editable": {
+                        "type": "boolean"
+                      },
+                      "visible": {
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "default": {}
+                  }
+                },
+                "required": [
+                  "strategies"
+                ],
+                "additionalProperties": false
+              },
+              "inputBinding": {
+                "type": "object",
+                "properties": {
+                  "param": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "param"
+                ],
+                "additionalProperties": false
+              },
+              "literalValue": {
+                "type": "string"
+              },
+              "precondition": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "urlMatches"
+                      },
+                      "pattern": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "pattern"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "elementVisible"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textPresent"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textAbsent"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "valueEquals"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "postcondition": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "urlMatches"
+                      },
+                      "pattern": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "pattern"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "elementVisible"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textPresent"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textAbsent"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "valueEquals"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "risk": {
+                "type": "string",
+                "enum": [
+                  "safe",
+                  "sensitive",
+                  "irreversible"
+                ],
+                "default": "safe"
+              },
+              "policy": {
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "confirm",
+                  "block"
+                ],
+                "default": "auto"
+              },
+              "recover": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "when": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "urlMatches"
+                            },
+                            "pattern": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "pattern"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "elementVisible"
+                            },
+                            "locator": {
+                              "type": "object",
+                              "properties": {
+                                "strategies": {
+                                  "type": "array",
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "role"
+                                          },
+                                          "role": {
+                                            "type": "string"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "exact": {
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "role",
+                                          "name"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "label"
+                                          },
+                                          "label": {
+                                            "type": "string"
+                                          },
+                                          "scope": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "label"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "rowAnchor"
+                                          },
+                                          "header": {
+                                            "type": "string"
+                                          },
+                                          "cell": {
+                                            "type": "string"
+                                          },
+                                          "targetCol": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "header",
+                                          "cell",
+                                          "targetCol"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "attr"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "value": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "name",
+                                          "value"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "text"
+                                          },
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "exact": {
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "text"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "structural"
+                                          },
+                                          "css": {
+                                            "type": "string"
+                                          },
+                                          "index": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "css",
+                                          "index"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    ]
+                                  },
+                                  "minItems": 1
+                                },
+                                "framePath": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "invariants": {
+                                  "type": "object",
+                                  "properties": {
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "editable": {
+                                      "type": "boolean"
+                                    },
+                                    "visible": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "default": {}
+                                }
+                              },
+                              "required": [
+                                "strategies"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "locator"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "textPresent"
+                            },
+                            "text": {
+                              "type": "string"
+                            },
+                            "scope": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "textAbsent"
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "valueEquals"
+                            },
+                            "locator": {
+                              "type": "object",
+                              "properties": {
+                                "strategies": {
+                                  "type": "array",
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "role"
+                                          },
+                                          "role": {
+                                            "type": "string"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "exact": {
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "role",
+                                          "name"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "label"
+                                          },
+                                          "label": {
+                                            "type": "string"
+                                          },
+                                          "scope": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "label"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "rowAnchor"
+                                          },
+                                          "header": {
+                                            "type": "string"
+                                          },
+                                          "cell": {
+                                            "type": "string"
+                                          },
+                                          "targetCol": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "header",
+                                          "cell",
+                                          "targetCol"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "attr"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "value": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "name",
+                                          "value"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "text"
+                                          },
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "exact": {
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "text"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "by": {
+                                            "type": "string",
+                                            "const": "structural"
+                                          },
+                                          "css": {
+                                            "type": "string"
+                                          },
+                                          "index": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "by",
+                                          "css",
+                                          "index"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    ]
+                                  },
+                                  "minItems": 1
+                                },
+                                "framePath": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "invariants": {
+                                  "type": "object",
+                                  "properties": {
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "editable": {
+                                      "type": "boolean"
+                                    },
+                                    "visible": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "default": {}
+                                }
+                              },
+                              "required": [
+                                "strategies"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "locator",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "do": {
+                      "type": "string",
+                      "enum": [
+                        "dismiss",
+                        "retry",
+                        "reauth"
+                      ]
+                    },
+                    "target": {
+                      "type": "object",
+                      "properties": {
+                        "strategies": {
+                          "type": "array",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "by": {
+                                    "type": "string",
+                                    "const": "role"
+                                  },
+                                  "role": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "exact": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "by",
+                                  "role",
+                                  "name"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "by": {
+                                    "type": "string",
+                                    "const": "label"
+                                  },
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "scope": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "by",
+                                  "label"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "by": {
+                                    "type": "string",
+                                    "const": "rowAnchor"
+                                  },
+                                  "header": {
+                                    "type": "string"
+                                  },
+                                  "cell": {
+                                    "type": "string"
+                                  },
+                                  "targetCol": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "by",
+                                  "header",
+                                  "cell",
+                                  "targetCol"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "by": {
+                                    "type": "string",
+                                    "const": "attr"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "by",
+                                  "name",
+                                  "value"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "by": {
+                                    "type": "string",
+                                    "const": "text"
+                                  },
+                                  "text": {
+                                    "type": "string"
+                                  },
+                                  "exact": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "by",
+                                  "text"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "by": {
+                                    "type": "string",
+                                    "const": "structural"
+                                  },
+                                  "css": {
+                                    "type": "string"
+                                  },
+                                  "index": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "required": [
+                                  "by",
+                                  "css",
+                                  "index"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          },
+                          "minItems": 1
+                        },
+                        "framePath": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "invariants": {
+                          "type": "object",
+                          "properties": {
+                            "role": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "editable": {
+                              "type": "boolean"
+                            },
+                            "visible": {
+                              "type": "boolean"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "default": {}
+                        }
+                      },
+                      "required": [
+                        "strategies"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "maxAttempts": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "default": 2
+                    }
+                  },
+                  "required": [
+                    "when",
+                    "do"
+                  ],
+                  "additionalProperties": false
+                },
+                "default": []
+              }
+            },
+            "required": [
+              "id",
+              "intent",
+              "action"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "successCondition": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "urlMatches"
+                },
+                "pattern": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "pattern"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "elementVisible"
+                },
+                "locator": {
+                  "type": "object",
+                  "properties": {
+                    "strategies": {
+                      "type": "array",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "role"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "exact": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "role",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "label"
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "scope": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "label"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "rowAnchor"
+                              },
+                              "header": {
+                                "type": "string"
+                              },
+                              "cell": {
+                                "type": "string"
+                              },
+                              "targetCol": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "header",
+                              "cell",
+                              "targetCol"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "attr"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "name",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "text"
+                              },
+                              "text": {
+                                "type": "string"
+                              },
+                              "exact": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "text"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "structural"
+                              },
+                              "css": {
+                                "type": "string"
+                              },
+                              "index": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "css",
+                              "index"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      },
+                      "minItems": 1
+                    },
+                    "framePath": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "invariants": {
+                      "type": "object",
+                      "properties": {
+                        "role": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "editable": {
+                          "type": "boolean"
+                        },
+                        "visible": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "default": {}
+                    }
+                  },
+                  "required": [
+                    "strategies"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "kind",
+                "locator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "textPresent"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "textAbsent"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "valueEquals"
+                },
+                "locator": {
+                  "type": "object",
+                  "properties": {
+                    "strategies": {
+                      "type": "array",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "role"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "exact": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "role",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "label"
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "scope": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "label"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "rowAnchor"
+                              },
+                              "header": {
+                                "type": "string"
+                              },
+                              "cell": {
+                                "type": "string"
+                              },
+                              "targetCol": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "header",
+                              "cell",
+                              "targetCol"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "attr"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "name",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "text"
+                              },
+                              "text": {
+                                "type": "string"
+                              },
+                              "exact": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "text"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "string",
+                                "const": "structural"
+                              },
+                              "css": {
+                                "type": "string"
+                              },
+                              "index": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "by",
+                              "css",
+                              "index"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      },
+                      "minItems": 1
+                    },
+                    "framePath": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "invariants": {
+                      "type": "object",
+                      "properties": {
+                        "role": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "editable": {
+                          "type": "boolean"
+                        },
+                        "visible": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "default": {}
+                    }
+                  },
+                  "required": [
+                    "strategies"
+                  ],
+                  "additionalProperties": false
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "locator",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "businessOutcomes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "detect": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "urlMatches"
+                      },
+                      "pattern": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "pattern"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "elementVisible"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textPresent"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "textAbsent"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "valueEquals"
+                      },
+                      "locator": {
+                        "type": "object",
+                        "properties": {
+                          "strategies": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "role"
+                                    },
+                                    "role": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "role",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "label"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "scope": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "label"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "rowAnchor"
+                                    },
+                                    "header": {
+                                      "type": "string"
+                                    },
+                                    "cell": {
+                                      "type": "string"
+                                    },
+                                    "targetCol": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "header",
+                                    "cell",
+                                    "targetCol"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "attr"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "name",
+                                    "value"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "text"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "exact": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "by": {
+                                      "type": "string",
+                                      "const": "structural"
+                                    },
+                                    "css": {
+                                      "type": "string"
+                                    },
+                                    "index": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    }
+                                  },
+                                  "required": [
+                                    "by",
+                                    "css",
+                                    "index"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ]
+                            },
+                            "minItems": 1
+                          },
+                          "framePath": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "invariants": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "editable": {
+                                "type": "boolean"
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "default": {}
+                          }
+                        },
+                        "required": [
+                          "strategies"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "locator",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "returns": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "terminal": {
+                "type": "boolean",
+                "default": true
+              }
+            },
+            "required": [
+              "code",
+              "detect"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "guardrails": {
+          "type": "object",
+          "properties": {
+            "allowlist": {
+              "type": "object",
+              "properties": {
+                "routes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "navigate",
+                      "click",
+                      "type",
+                      "select",
+                      "read",
+                      "waitFor",
+                      "assert"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "routes",
+                "actions"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "allowlist"
+          ],
+          "additionalProperties": false
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "discoveredBy": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string"
+                },
+                "model": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "provider",
+                "model"
+              ],
+              "additionalProperties": false
+            },
+            "discoveredAt": {
+              "type": "string"
+            },
+            "sourceRunId": {
+              "type": "string"
+            },
+            "evidenceRef": {
+              "type": "string"
+            },
+            "checksum": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "discoveredBy",
+            "discoveredAt",
+            "sourceRunId",
+            "evidenceRef",
+            "checksum"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "capabilityId",
+        "version",
+        "name",
+        "description",
+        "target",
+        "steps",
+        "successCondition",
+        "guardrails",
+        "provenance"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

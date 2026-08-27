@@ -1,0 +1,33 @@
+{
+  "name": "cua-automation-system",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Computer-use automation: LLM discovers a UI task once, records it as a typed reusable capability, replays it deterministically with no model in the loop.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "schema:export": "tsx src/artifact/export-schema.ts",
+    "mock-bank": "tsx src/cli/index.ts serve-mock",
+    "discover": "tsx src/cli/index.ts discover",
+    "replay": "tsx src/cli/index.ts replay",
+    "catalog": "tsx src/cli/index.ts catalog",
+    "operator": "tsx src/cli/index.ts operator"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "openai": "^4.57.0",
+    "playwright": "^1.47.0",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

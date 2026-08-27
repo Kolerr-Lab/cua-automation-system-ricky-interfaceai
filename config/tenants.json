@@ -1,0 +1,15 @@
+{
+  "$comment": "Tenant profiles (blueprint §11). Same appFamily 'acme-corebanking', different branding/base. A capability recorded on one replays on another via these.",
+  "acme": {
+    "tenantId": "acme",
+    "appFamily": "acme-corebanking",
+    "baseUrl": "http://localhost:4010/t/acme",
+    "labelOverrides": {}
+  },
+  "globus": {
+    "tenantId": "globus",
+    "appFamily": "acme-corebanking",
+    "baseUrl": "http://localhost:4010/t/globus",
+    "labelOverrides": { "Savings Balance": "Savings Bal." }
+  }
+}
