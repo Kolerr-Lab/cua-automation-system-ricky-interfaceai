@@ -19,7 +19,12 @@ export interface ReplayDeps {
   tenant: TenantProfile;
 }
 
-export async function replay(cap: Capability, inputs: Record<string, string>, deps: ReplayDeps): Promise<ReplayResult> {
+export interface ReplayOptions {
+  /** Resume from this step index (control-transfer): earlier steps already ran on the live session. */
+  startIndex?: number;
+}
+
+export async function replay(cap: Capability, inputs: Record<string, string>, deps: ReplayDeps, opts: ReplayOptions = {}): Promise<ReplayResult> {
   const { surface, safety, trace, tenant } = deps;
   const recovery: string[] = [];
   const outputs: Record<string, string> = {};
@@ -31,7 +36,8 @@ export async function replay(cap: Capability, inputs: Record<string, string>, de
     }
   }
 
-  for (const step of cap.steps) {
+  for (let si = opts.startIndex ?? 0; si < cap.steps.length; si++) {
+    const step = cap.steps[si]!;
     trace.emit("act", "step.begin", { stepId: step.id, data: { intent: step.intent } });
 
     // A prior action may have landed us on a business outcome or a recoverable interstitial. Check
@@ -56,14 +62,16 @@ export async function replay(cap: Capability, inputs: Record<string, string>, de
       if (blocked) return hardFail(deps, step.id, "GUARDRAIL_BLOCKED", "navigate allowed", blocked);
       await surface.navigate(url);
     } else if (step.target) {
-      let resolved = await surface.resolve(overrideBundle(tenant, step.target));
-      if (!resolved) {
-        // Not resolving may mean an unexpected business outcome or a recoverable interstitial.
+      const bundle = overrideBundle(tenant, step.target);
+      let resolved = await surface.resolve(bundle);
+      // A prior action may still be navigating, or a business/recoverable state may have appeared.
+      for (let attempt = 0; !resolved && attempt < 3; attempt++) {
         const bo2 = await detectBusinessOutcome(cap, deps);
         if (bo2) return businessOutcome(deps, recovery, bo2.code, bo2.returns);
         if ((await runRecovery(cap, deps, step.id, recovery)) === "escalate")
           return escalate(cap, deps, step.id, "unrecoverable", "Recovery requires a human.");
-        resolved = await surface.resolve(overrideBundle(tenant, step.target));
+        await surface.settle();
+        resolved = await surface.resolve(bundle);
       }
       if (!resolved) return hardFail(deps, step.id, "LOCATOR_UNRESOLVED", `resolve ${step.intent}`, `no strategy matched at ${surface.url()}`);
       trace.emit("act", resolved.usedFallback ? "locator.fallback_used" : "locator.resolved", {
