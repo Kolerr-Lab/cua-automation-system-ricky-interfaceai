@@ -149,6 +149,7 @@ export class WebSurface implements Surface {
     // networkidle waits for in-flight FRAME navigations (a click can navigate a child frame, not the
     // top page). It is bounded so it can never hang the run if idle is never reached under a runner.
     await this.page.waitForLoadState("networkidle", { timeout: 3000 }).catch(() => {});
+    await this.page.waitForTimeout(500);
     for (const f of this.page.frames()) await f.waitForLoadState("domcontentloaded").catch(() => {});
   }
 
