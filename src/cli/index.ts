@@ -31,7 +31,7 @@ async function serveMock(args: string[]): Promise<void> {
   const { startMockBank } = await import("../../mock-bank/src/server.js");
   const port = Number(flag(args, "--port") ?? 4010);
   await startMockBank(port);
-  console.log(`mock-bank on http://localhost:${port}  (tenants: /t/acme, /t/globus)`);
+  console.log(`mock-bank on http://127.0.0.1:${port}  (tenants: /t/acme, /t/globus)`);
 }
 
 async function discoverCmd(args: string[]): Promise<void> {
@@ -129,7 +129,7 @@ async function operatorCmd(args: string[]): Promise<void> {
   const { serveOperatorPanel } = await import("../escalation/panel.js");
   const port = Number(flag(args, "--port") ?? 4020);
   await serveOperatorPanel(port, flag(args, "--evidence") ?? "evidence");
-  console.log(`operator panel on http://localhost:${port}  (renders pending interventions from evidence/)`);
+  console.log(`operator panel on http://127.0.0.1:${port}  (renders pending interventions from evidence/)`);
 }
 
 void main();

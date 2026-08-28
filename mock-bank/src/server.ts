@@ -95,6 +95,6 @@ export function createMockBank(): express.Express {
 
 export function startMockBank(port = 4010): Promise<Server> {
   return new Promise((resolve) => {
-    const server = createMockBank().listen(port, () => resolve(server));
+    const server = createMockBank().listen(port, "127.0.0.1", () => resolve(server));
   });
 }

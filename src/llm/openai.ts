@@ -53,6 +53,7 @@ export function parseDecision(content: string): AgentDecision {
     case "click":
       return { thought, action: { type: "click", ref } };
     case "type":
+    case "fill":
       return { thought, action: { type: "type", ref, value: String(a["value"] ?? "") } };
     case "select":
       return { thought, action: { type: "select", ref, value: String(a["value"] ?? "") } };

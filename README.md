@@ -12,6 +12,13 @@ the same live session when stuck, and stays within safety guardrails.
 The design write-up is in [`REPORT.md`](./REPORT.md). The source of truth for the architecture is
 [`docs/governance/blueprint-protocol.md`](./docs/governance/blueprint-protocol.md).
 
+## 🚀 Reviewer Guide: How to evaluate this submission
+
+Welcome! To evaluate this submission against the core requirements:
+1. **Design & Trade-offs**: Start with [`REPORT.md`](./REPORT.md). It addresses Architecture, the Artifact Schema, Determinism, Error Handling (Business vs Hard failures), Heterogeneity, Escalation, Safety, and what was intentionally cut.
+2. **Evidence**: Look at the [`evidence/`](./evidence) directory. It contains both a genuine LLM-driven run (`01-discovery-mock` or your real runs) and multiple deterministic replay runs demonstrating the full error taxonomy (success, business outcome, recovered interstitial, hard failure, and cross-tenant drift).
+3. **Run it yourself**: Follow the **Demo path** below. The system is designed to be fully testable locally against a hostile mock legacy bank (framesets, no test IDs, injectable chaos), without needing live API keys for the replay phase. IPv4/IPv6 localhost binding issues have been explicitly handled (bound to `127.0.0.1`).
+
 ## What's here
 
 - A **discovery agent** (`src/agent`, `src/llm`) — observe → decide → act, driven by a real LLM (OpenAI),

@@ -3,13 +3,13 @@
   "acme": {
     "tenantId": "acme",
     "appFamily": "acme-corebanking",
-    "baseUrl": "http://localhost:4010/t/acme",
+    "baseUrl": "http://127.0.0.1:4010/t/acme",
     "labelOverrides": {}
   },
   "globus": {
     "tenantId": "globus",
     "appFamily": "acme-corebanking",
-    "baseUrl": "http://localhost:4010/t/globus",
+    "baseUrl": "http://127.0.0.1:4010/t/globus",
     "labelOverrides": { "Savings Balance": "Savings Bal." }
   }
 }
